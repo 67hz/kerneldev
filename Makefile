@@ -18,3 +18,7 @@ all:
 
 clean:
 	rm -rf $(TARGET).o
+
+
+pull-dev:
+	scp ubuntu@`uvt-kvm ip kerneldev`:~/sandbox/* .

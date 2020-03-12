@@ -84,8 +84,12 @@ ssize_t scull_read(struct file *filp, char __user *buf, size_t count,
         retval = -EFAULT;
         goto out;
     }
+    *f_pos += count;
+    retval = count;
 
-
+out:
+    up(&dev->sem);
+    return retval;
 }
 
 int scrull_trim {
@@ -115,7 +119,7 @@ int scull_open(struct inode *inode, struct file *filp)
 
     dev = container_of(inode->i_cdev, struct scull_dev, cdev);
     filp->private_data = dev;   /* for other methods */
-    
+
     /* Trim to 0 the length of the device if open was WR only */
     if ( (flip->f_flags & O_ACCMODE) == O_WRONLY) {
         scull_trim(dev);    /* ignore errors */
@@ -149,7 +153,7 @@ static void scull_setup_cdev(struct scull_dev *dev, int index)
 
 static int __init scull_init(void)
 {
-	dev_t dev;
+    dev_t dev;
     int result;
     char *module_name = "scull";
 
@@ -162,7 +166,7 @@ static int __init scull_init(void)
         scull_major = MAJOR(dev);
     }
     if (result < 0) {
-        printk(KERN_WARNING "scull: cannot get major %d\m", scull_major);
+        printk(KERN_WARNING "scull: cannot get major %d\n", scull_major);
         return result;
     }
 
@@ -178,5 +182,3 @@ static void __exit scull_exit(void)
     printk(KERN_ALERT "scull out");
 }
 
-module_init(scull_init);
-module_exit(scull_exit);
