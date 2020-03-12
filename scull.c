@@ -2,10 +2,13 @@
 #include <linux/module.h>   /* defns of symbols and f()s */
 #include <linux/init.h>     /* init and cleanup fns() */
 #include <linux/fs.h>
+#include <linux/types.h>
+#include <linux/proc_fs.h>
 #include <linux/sched.h>
+#include <linux/errno.h>
 #include <linux/cdev.h>
 #include <linux/slab.h>     /* memory management */
-#include <asm/access.h>     /* for user-space buffer access */
+#include <asm/uaccess.h>     /* for user-space buffer access */
 #include <linux/moduleparam.h>
 #include "scull.h"
 
@@ -23,33 +26,12 @@ module_param(scull_qset, int, S_IRUGO);
 
 unsigned int scull_nr_devs = 4;
 
-struct file_operations scull_fops = {
-    .owner =    THIS_MODULE,
-    .llseek =   scull_llseek,
-    .read =     scull_read,
-    .write =    scull_write,
-    .ioctl =    scull_ioctl,
-    .open =     scull_open,
-    .release =  scull_release,
-};
 
-struct scull_dev {
-    struct scull_qset *data;    /* Pointer to first quantum set */
-    int quantum;                /* the current quantum size */
-    int qset;                   /* the current array size */
-    unsigned long size;         /* amount of data stored here */
-    unsigned int access_key;    /* used by sculluid and scullpriv */
-    struct semaphore sem;       /* mutual exclusion sempaphore */
-    struct cdev cdev;           /* Char device structure */
-};
 
-struct scull_qset {
-    void **data;
-    struct scull_qset *next;
-};
+
 
 ssize_t scull_read(struct file *filp, char __user *buf, size_t count,
-        ioo_t *f_pos)
+        loff_t *f_pos)
 {
     struct scull_dev *dev = filp->private_data;
     struct scull_qset *dptr;    /* the first list item */
@@ -92,7 +74,62 @@ out:
     return retval;
 }
 
-int scrull_trim {
+ssize_t scull_write(struct file *filp, const char __user *buf, size_t count,
+        loff_t *f_pos)
+{
+    struct scull_dev *dev = filp->private_data;
+    struct scull_qset *dptr;
+    int quantum = dev->quantum;
+    int qset = dev->qset;
+    int itemsize = quantum * qset;
+    int item, s_pos, q_pos, rest;
+    ssize_t retval = -ENOMEM;   /* value used in "goto out" statements */
+
+    if (down_interruptible(&dev->sem))
+        return -ERESTARTSYS;
+
+    /* find list item, qset index and offset in quantum */
+    item = (long)*f_pos / itemsize;
+    rest = (long)*f_pos % itemsize;
+    s_pos = rest / quantum;
+    q_pos = rest % quantum;
+
+    /* follow list up to right pos */
+    dptr = scull_follow(dev, item);
+    if (dptr == NULL)
+        goto out;
+    if (!dptr -> data) {
+        dptr->data = kmalloc(qset * sizeof(char *), GFP_KERNEL);
+        if (!dptr->data)
+            goto out;
+        memset(dptr->data, 0, qset * sizeof(char *));
+    }
+    if (!dptr->data[s_pos]) {
+        dptr->data[s_pos] = kmalloc(quantum, GFP_KERNEL);
+        if (!dptr->data[s_pos])
+            goto out;
+    }
+    /* write only up to end of this quantum */
+    if (count > quantum - q_pos)
+        count = quantum - q_pos;
+
+    if (copy_from_user(dptr->data[s_pos]+q_pos, buf, count)) {
+        retval = -EFAULT;
+        goto out;
+    }
+    *f_pos += count;
+    retval = count;
+
+    /* update size */
+    if (dev->size < *f_pos)
+        dev->size = *f_pos;
+
+out:
+    up(&dev->sem);
+    return retval;
+}
+
+int scull_trim (struct scull_dev *dev){
     struct scull_qset *next, *dptr;
     int qset = dev->qset;   /* dev is not null */
     int i;
@@ -121,7 +158,7 @@ int scull_open(struct inode *inode, struct file *filp)
     filp->private_data = dev;   /* for other methods */
 
     /* Trim to 0 the length of the device if open was WR only */
-    if ( (flip->f_flags & O_ACCMODE) == O_WRONLY) {
+    if ( (filp->f_flags & O_ACCMODE) == O_WRONLY) {
         scull_trim(dev);    /* ignore errors */
     }
     return 0;
@@ -135,6 +172,18 @@ int scull_release(struct inode *inode, struct file *filp)
     printk(KERN_INFO "releasing scull\n");
     return 0;
 }
+
+
+
+struct file_operations scull_fops = {
+    .owner =    THIS_MODULE,
+    /* .llseek =   scull_llseek, */
+    .read =     scull_read,
+    .write =    scull_write,
+    /* .ioctl =    scull_ioctl, */
+    .open =     scull_open,
+    .release =  scull_release,
+};
 
 
 
