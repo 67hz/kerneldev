@@ -17,8 +17,14 @@ all:
 .PHONY: clean
 
 clean:
-	rm -rf $(TARGET).o
+	rm -rf *.o *.cmd *.ko *.mod.c *.mod
 
 
 pull-dev:
 	scp ubuntu@`uvt-kvm ip kerneldev`:~/sandbox/* .
+
+push-dev:
+	scp ./*.[ch] ubuntu@`uvt-kvm ip kerneldev`:~/sandbox/
+
+push-dev-folder:
+	scp ./$(x)/*.[ch] ubuntu@`uvt-kvm ip kerneldev`:~/sandbox/$(x)
