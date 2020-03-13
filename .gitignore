@@ -4,3 +4,11 @@
 **/*.out
 **/*.symvers
 **/*.order
+
+**/compile_commands.json
+**/.clangd
+**/.ycm_extra_conf.py
+
+
+
+
