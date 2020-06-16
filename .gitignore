@@ -4,6 +4,7 @@
 **/*.out
 **/*.symvers
 **/*.order
+**/*.cmd
 
 **/compile_commands.json
 **/.clangd

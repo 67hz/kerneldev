@@ -1,10 +1,9 @@
-scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
- include/linux/kconfig.h include/generated/autoconf.h \
- include/linux/compiler_types.h include/linux/compiler_attributes.h \
- include/linux/compiler-gcc.h include/linux/kernel.h \
- /usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h include/linux/limits.h \
- include/uapi/linux/limits.h include/linux/types.h \
- include/uapi/linux/types.h arch/x86/include/uapi/asm/types.h \
+scull.o: /home/ubuntu/sandbox/scull/scull.c include/linux/kconfig.h \
+ include/generated/autoconf.h include/linux/compiler_types.h \
+ include/linux/compiler_attributes.h include/linux/compiler-gcc.h \
+ include/linux/kernel.h /usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h \
+ include/linux/limits.h include/uapi/linux/limits.h include/linux/types.h \
+ include/uapi/linux/types.h arch/x86/include/generated/uapi/asm/types.h \
  include/uapi/asm-generic/types.h include/asm-generic/int-ll64.h \
  include/uapi/asm-generic/int-ll64.h \
  arch/x86/include/uapi/asm/bitsperlong.h \
@@ -27,7 +26,9 @@ scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
  arch/x86/include/asm/required-features.h \
  arch/x86/include/asm/disabled-features.h \
  include/asm-generic/bitops/const_hweight.h \
- include/asm-generic/bitops-instrumented.h \
+ include/asm-generic/bitops/instrumented-atomic.h \
+ include/asm-generic/bitops/instrumented-non-atomic.h \
+ include/asm-generic/bitops/instrumented-lock.h \
  include/asm-generic/bitops/le.h arch/x86/include/uapi/asm/byteorder.h \
  include/linux/byteorder/little_endian.h \
  include/uapi/linux/byteorder/little_endian.h include/linux/swab.h \
@@ -57,7 +58,7 @@ scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
  arch/x86/include/asm/mem_encrypt.h arch/x86/include/uapi/asm/bootparam.h \
  include/linux/screen_info.h include/uapi/linux/screen_info.h \
  include/linux/apm_bios.h include/uapi/linux/apm_bios.h \
- include/uapi/linux/ioctl.h arch/x86/include/uapi/asm/ioctl.h \
+ include/uapi/linux/ioctl.h arch/x86/include/generated/uapi/asm/ioctl.h \
  include/asm-generic/ioctl.h include/uapi/asm-generic/ioctl.h \
  include/linux/edd.h include/uapi/linux/edd.h arch/x86/include/asm/ist.h \
  arch/x86/include/uapi/asm/ist.h include/video/edid.h \
@@ -81,32 +82,33 @@ scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
  include/asm-generic/qspinlock_types.h \
  include/asm-generic/qrwlock_types.h \
  arch/x86/include/uapi/asm/sigcontext.h arch/x86/include/asm/msr.h \
- arch/x86/include/asm/msr-index.h arch/x86/include/uapi/asm/errno.h \
+ arch/x86/include/asm/msr-index.h \
+ arch/x86/include/generated/uapi/asm/errno.h \
  include/uapi/asm-generic/errno.h include/uapi/asm-generic/errno-base.h \
  arch/x86/include/asm/cpumask.h include/linux/cpumask.h \
  include/linux/bitmap.h include/linux/string.h \
  include/uapi/linux/string.h arch/x86/include/asm/string.h \
- arch/x86/include/asm/string_64.h arch/x86/include/uapi/asm/msr.h \
+ arch/x86/include/asm/string_64.h include/linux/atomic.h \
  arch/x86/include/asm/atomic.h arch/x86/include/asm/cmpxchg.h \
  arch/x86/include/asm/cmpxchg_64.h arch/x86/include/asm/atomic64_64.h \
  include/asm-generic/atomic-instrumented.h \
- include/linux/tracepoint-defs.h include/linux/atomic.h \
  include/linux/atomic-fallback.h include/asm-generic/atomic-long.h \
+ arch/x86/include/uapi/asm/msr.h include/linux/tracepoint-defs.h \
  arch/x86/include/asm/paravirt.h arch/x86/include/asm/frame.h \
  arch/x86/include/asm/special_insns.h arch/x86/include/asm/fpu/types.h \
  arch/x86/include/asm/unwind_hints.h arch/x86/include/asm/orc_types.h \
- include/linux/personality.h include/uapi/linux/personality.h \
- include/linux/err.h include/linux/irqflags.h \
- arch/x86/include/asm/irqflags.h include/linux/bottom_half.h \
- arch/x86/include/generated/asm/mmiowb.h include/asm-generic/mmiowb.h \
- include/linux/spinlock_types.h include/linux/lockdep.h \
- include/linux/rwlock_types.h arch/x86/include/asm/spinlock.h \
- arch/x86/include/asm/qspinlock.h include/asm-generic/qspinlock.h \
- arch/x86/include/asm/qrwlock.h include/asm-generic/qrwlock.h \
- include/linux/rwlock.h include/linux/spinlock_api_smp.h \
- include/linux/rwlock_api_smp.h include/linux/time32.h \
- include/linux/timex.h include/uapi/linux/timex.h \
- include/uapi/linux/param.h arch/x86/include/uapi/asm/param.h \
+ arch/x86/include/asm/vmxfeatures.h include/linux/personality.h \
+ include/uapi/linux/personality.h include/linux/err.h \
+ include/linux/irqflags.h arch/x86/include/asm/irqflags.h \
+ include/linux/bottom_half.h arch/x86/include/generated/asm/mmiowb.h \
+ include/asm-generic/mmiowb.h include/linux/spinlock_types.h \
+ include/linux/lockdep.h include/linux/rwlock_types.h \
+ arch/x86/include/asm/spinlock.h arch/x86/include/asm/qspinlock.h \
+ include/asm-generic/qspinlock.h arch/x86/include/asm/qrwlock.h \
+ include/asm-generic/qrwlock.h include/linux/rwlock.h \
+ include/linux/spinlock_api_smp.h include/linux/rwlock_api_smp.h \
+ include/linux/time32.h include/linux/timex.h include/uapi/linux/timex.h \
+ include/uapi/linux/param.h arch/x86/include/generated/uapi/asm/param.h \
  include/asm-generic/param.h include/uapi/asm-generic/param.h \
  arch/x86/include/asm/timex.h arch/x86/include/asm/tsc.h \
  include/linux/uidgid.h include/linux/highuid.h include/linux/kmod.h \
@@ -136,17 +138,12 @@ scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
  arch/x86/include/asm/apic.h arch/x86/include/asm/fixmap.h \
  arch/x86/include/asm/acpi.h include/acpi/pdc_intel.h \
  arch/x86/include/asm/numa.h arch/x86/include/asm/topology.h \
- include/asm-generic/topology.h arch/x86/include/asm/realmode.h \
- arch/x86/include/asm/io.h arch/x86/include/generated/asm/early_ioremap.h \
- include/asm-generic/early_ioremap.h include/asm-generic/iomap.h \
- include/asm-generic/pci_iomap.h include/asm-generic/io.h \
- include/linux/logic_pio.h include/linux/fwnode.h include/linux/vmalloc.h \
- include/linux/llist.h include/linux/overflow.h \
- arch/x86/include/uapi/asm/vsyscall.h include/asm-generic/fixmap.h \
- arch/x86/include/asm/hardirq.h arch/x86/include/asm/io_apic.h \
- arch/x86/include/asm/irq_vectors.h include/linux/topology.h \
- include/linux/smp.h include/linux/percpu.h include/linux/sysctl.h \
- include/uapi/linux/sysctl.h include/linux/elf.h \
+ include/asm-generic/topology.h arch/x86/include/uapi/asm/vsyscall.h \
+ include/asm-generic/fixmap.h arch/x86/include/asm/hardirq.h \
+ arch/x86/include/asm/io_apic.h arch/x86/include/asm/irq_vectors.h \
+ include/linux/topology.h include/linux/arch_topology.h \
+ include/linux/percpu.h include/linux/smp.h include/linux/llist.h \
+ include/linux/sysctl.h include/uapi/linux/sysctl.h include/linux/elf.h \
  arch/x86/include/asm/elf.h arch/x86/include/asm/user.h \
  arch/x86/include/asm/user_64.h arch/x86/include/asm/fsgsbase.h \
  arch/x86/include/asm/vdso.h include/uapi/linux/elf.h \
@@ -154,9 +151,8 @@ scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
  include/linux/sysfs.h include/linux/kernfs.h include/linux/idr.h \
  include/linux/radix-tree.h include/linux/xarray.h \
  include/linux/kconfig.h include/linux/kobject_ns.h include/linux/kref.h \
- include/linux/refcount.h arch/x86/include/asm/refcount.h \
- include/linux/moduleparam.h include/linux/rbtree_latch.h \
- include/linux/error-injection.h arch/x86/include/asm/error-injection.h \
+ include/linux/refcount.h include/linux/moduleparam.h \
+ include/linux/rbtree_latch.h include/linux/error-injection.h \
  include/asm-generic/error-injection.h arch/x86/include/asm/module.h \
  include/asm-generic/module.h arch/x86/include/asm/orc_types.h \
  include/linux/fs.h include/linux/wait_bit.h include/linux/kdev_t.h \
@@ -168,7 +164,8 @@ scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
  include/linux/pid.h include/linux/capability.h \
  include/uapi/linux/capability.h include/linux/semaphore.h \
  include/linux/fcntl.h include/uapi/linux/fcntl.h \
- arch/x86/include/uapi/asm/fcntl.h include/uapi/asm-generic/fcntl.h \
+ arch/x86/include/generated/uapi/asm/fcntl.h \
+ include/uapi/asm-generic/fcntl.h include/uapi/linux/openat2.h \
  include/uapi/linux/fiemap.h include/linux/migrate_mode.h \
  include/linux/percpu-rwsem.h include/linux/rcuwait.h \
  include/linux/rcu_sync.h include/linux/delayed_call.h \
@@ -176,9 +173,10 @@ scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
  include/linux/ioprio.h include/linux/sched.h include/uapi/linux/sched.h \
  include/linux/sem.h include/uapi/linux/sem.h include/linux/ipc.h \
  include/linux/rhashtable-types.h include/uapi/linux/ipc.h \
- arch/x86/include/uapi/asm/ipcbuf.h include/uapi/asm-generic/ipcbuf.h \
- arch/x86/include/uapi/asm/sembuf.h include/linux/shm.h \
- include/uapi/linux/shm.h include/uapi/asm-generic/hugetlb_encode.h \
+ arch/x86/include/generated/uapi/asm/ipcbuf.h \
+ include/uapi/asm-generic/ipcbuf.h arch/x86/include/uapi/asm/sembuf.h \
+ include/linux/shm.h include/uapi/linux/shm.h \
+ include/uapi/asm-generic/hugetlb_encode.h \
  arch/x86/include/uapi/asm/shmbuf.h include/uapi/asm-generic/shmbuf.h \
  arch/x86/include/asm/shmparam.h include/linux/kcov.h \
  include/uapi/linux/kcov.h include/linux/plist.h include/linux/hrtimer.h \
@@ -192,14 +190,16 @@ scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
  arch/x86/include/generated/asm/unistd_32_ia32.h \
  include/asm-generic/seccomp.h include/uapi/linux/unistd.h \
  include/linux/resource.h include/uapi/linux/resource.h \
- arch/x86/include/uapi/asm/resource.h include/asm-generic/resource.h \
- include/uapi/asm-generic/resource.h include/linux/latencytop.h \
- include/linux/sched/prio.h include/linux/signal_types.h \
+ arch/x86/include/generated/uapi/asm/resource.h \
+ include/asm-generic/resource.h include/uapi/asm-generic/resource.h \
+ include/linux/latencytop.h include/linux/sched/prio.h \
+ include/linux/sched/types.h include/linux/signal_types.h \
  include/uapi/linux/signal.h arch/x86/include/asm/signal.h \
  arch/x86/include/uapi/asm/signal.h \
  include/uapi/asm-generic/signal-defs.h \
  arch/x86/include/uapi/asm/siginfo.h include/uapi/asm-generic/siginfo.h \
- include/linux/task_io_accounting.h include/uapi/linux/rseq.h \
+ include/linux/task_io_accounting.h include/linux/posix-timers.h \
+ include/linux/alarmtimer.h include/uapi/linux/rseq.h \
  include/linux/sched/rt.h include/linux/iocontext.h \
  include/linux/fs_types.h include/uapi/linux/fs.h include/linux/quota.h \
  include/linux/percpu_counter.h include/uapi/linux/dqblk_xfs.h \
@@ -207,10 +207,12 @@ scull.o: /home/aaron/Learning/Kernel/scull/scull.c \
  include/linux/dqblk_qtree.h include/linux/projid.h \
  include/uapi/linux/quota.h include/linux/nfs_fs_i.h \
  include/linux/proc_fs.h include/linux/cdev.h include/linux/device.h \
+ include/linux/dev_printk.h include/linux/ratelimit.h \
  include/linux/ioport.h include/linux/klist.h include/linux/pm.h \
- include/linux/ratelimit.h arch/x86/include/asm/device.h \
- include/linux/pm_wakeup.h include/linux/slab.h \
- include/linux/percpu-refcount.h include/linux/kasan.h \
- arch/x86/include/asm/uaccess.h arch/x86/include/asm/smap.h \
- arch/x86/include/asm/extable.h arch/x86/include/asm/uaccess_64.h \
- /home/aaron/Learning/Kernel/scull/scull.h
+ include/linux/overflow.h include/linux/device/bus.h \
+ include/linux/device/class.h include/linux/device/driver.h \
+ arch/x86/include/asm/device.h include/linux/pm_wakeup.h \
+ include/linux/slab.h include/linux/percpu-refcount.h \
+ include/linux/kasan.h arch/x86/include/asm/uaccess.h \
+ arch/x86/include/asm/smap.h arch/x86/include/asm/extable.h \
+ arch/x86/include/asm/uaccess_64.h /home/ubuntu/sandbox/scull/scull.h
